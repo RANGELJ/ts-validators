@@ -15,7 +15,12 @@ const main = () => {
 
     assert.strictEqual(valueIsArrayOfNulls(null), false)
 
-    const valueIsBaseShape = buildValueIsShape({
+    type TestType = {
+        id: string;
+        array1: string[];
+    }
+
+    const valueIsBaseShape = buildValueIsShape<TestType>({
         id: valueIsString,
         array1: valueIsArrayOfString,
     })

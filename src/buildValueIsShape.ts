@@ -1,11 +1,9 @@
-import { Validator } from "./types"
+import type { ShapeValidator } from "./types"
 import valueIsRecord from "./valueIsRecord"
 
-const buildValueIsShape = <T extends Record<string | number, Validator<unknown>>>(shape: T) => {
+const buildValueIsShape = <T extends Record<string | number, unknown>>(shape: ShapeValidator<T>) => {
     const validators = Object.entries(shape)
-    return (value: unknown): value is {
-        [K in keyof T]: T[K] extends Validator<infer U> ? U : never;
-    } => {
+    return (value: unknown): value is T => {
         if (!valueIsRecord(value)) {
             return false
         }
