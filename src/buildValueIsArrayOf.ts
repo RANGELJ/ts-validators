@@ -1,12 +1,29 @@
-import valueIsArray from "./valueIsArray"
+import type { Validator, ValidatorOptions } from './types'
+import valueIsArray from './valueIsArray'
 
 const buildValueIsArrayOf = <T>(
-    itemValidator: (item: unknown) => item is T
-) => (value: unknown): value is T[] => {
+    itemValidator: Validator<T>,
+    defaultOptions?: ValidatorOptions,
+) => (value: unknown, options?: ValidatorOptions): value is T[] => {
+    const debugLogIsEnabled = defaultOptions?.debugLogIsEnabled || options?.debugLogIsEnabled
+
     if (!valueIsArray(value)) {
+        if (debugLogIsEnabled) {
+            console.log('Validating arrayOf, value should be an array')
+        }
         return false
     }
-    return !value.some((item) => !itemValidator(item))
+
+    const itemNotOfTypeIndex = value.findIndex((item) => !itemValidator(item, defaultOptions))
+
+    if (itemNotOfTypeIndex !== -1) {
+        if (debugLogIsEnabled) {
+            console.log(`Validating arrayOf, item should be of type T at index ${itemNotOfTypeIndex}`)
+        }
+        return false
+    }
+
+    return true
 }
 
 export default buildValueIsArrayOf
