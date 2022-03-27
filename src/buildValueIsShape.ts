@@ -22,7 +22,10 @@ const buildValueIsShape = <T extends Record<string | number, unknown>>(
                 return true
             }
     
-            const isNotValid = !validator(value[valuePropName])
+            const isNotValid = !validator(value[valuePropName], options ? {
+                ...options,
+                path: [...options.path, valuePropName],
+            } : undefined)
 
             if (isNotValid && shouldThrowErrorOnFail) {
                 throwValidationError([...options.path, valuePropName])

@@ -65,13 +65,19 @@ const main = () => {
     }), false)
 
     type TestArrayShape = {
-        a: string;
+        a: {
+            b: string;
+        };
     }
 
     buildValueIsArrayOf(buildValueIsShape<TestArrayShape>({
-        a: valueIsString,
+        a: buildValueIsShape<TestArrayShape['a']>({
+            b: valueIsString,
+        }),
     }))([
-        {},
+        {
+            a: {},
+        },
     ], {
         path: [],
         shouldThrowErrorOnFail: true,
