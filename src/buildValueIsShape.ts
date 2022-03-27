@@ -1,9 +1,16 @@
-import type { ShapeValidator } from "./types"
-import valueIsRecord from "./valueIsRecord"
+import type { ShapeValidator, Validator } from './types'
+import valueIsRecord from './valueIsRecord'
 
-const buildValueIsShape = <T extends Record<string | number, unknown>>(shape: ShapeValidator<T>) => {
+type A = { a?: string }
+
+type B = ShapeValidator<A>
+
+const buildValueIsShape = <T extends Record<string | number, unknown>>(
+    shape: ShapeValidator<T>
+) => {
     const validators = Object.entries(shape)
-    return (value: unknown): value is T => {
+
+    return ((value: unknown): value is T => {
         if (!valueIsRecord(value)) {
             return false
         }
@@ -14,7 +21,7 @@ const buildValueIsShape = <T extends Record<string | number, unknown>>(shape: Sh
     
             return !validator(value[valuePropName])
         })
-    }
+    }) as Validator<T>
 }
 
 export default buildValueIsShape

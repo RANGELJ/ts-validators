@@ -1,3 +1,5 @@
+import { Validator } from './types'
+
 const valueIsNumber = (value: unknown): value is number => {
     if (typeof value !== 'number'){
          return false
@@ -8,4 +10,4 @@ const valueIsNumber = (value: unknown): value is number => {
     return true
 }
 
-export default valueIsNumber
+export default valueIsNumber as Validator<number>

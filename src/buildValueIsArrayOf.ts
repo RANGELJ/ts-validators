@@ -4,7 +4,7 @@ import valueIsArray from './valueIsArray'
 const buildValueIsArrayOf = <T>(
     itemValidator: Validator<T>,
     defaultOptions?: ValidatorOptions,
-) => (value: unknown, options?: ValidatorOptions): value is T[] => {
+) => ((value: unknown, options?: ValidatorOptions): value is T[] => {
     const debugLogIsEnabled = defaultOptions?.debugLogIsEnabled || options?.debugLogIsEnabled
 
     if (!valueIsArray(value)) {
@@ -24,6 +24,6 @@ const buildValueIsArrayOf = <T>(
     }
 
     return true
-}
+}) as Validator<T[]>
 
 export default buildValueIsArrayOf

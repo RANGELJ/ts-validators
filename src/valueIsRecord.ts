@@ -1,3 +1,4 @@
+import { Validator } from './types'
 import valueIsArray from './valueIsArray'
 
 const valueIsRecord = (value: unknown): value is Record<string | number, unknown> => {
@@ -16,4 +17,4 @@ const valueIsRecord = (value: unknown): value is Record<string | number, unknown
     return true
 }
 
-export default valueIsRecord
+export default valueIsRecord as Validator<Record<string | number, unknown>>
