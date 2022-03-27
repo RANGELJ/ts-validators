@@ -70,11 +70,21 @@ const main = () => {
         };
     }
 
-    buildValueIsArrayOf(buildValueIsShape<TestArrayShape>('TestArrayShape', {
+    const valueIsTestArrayShape = buildValueIsArrayOf(buildValueIsShape<TestArrayShape>('TestArrayShape', {
         a: buildValueIsShape<TestArrayShape['a']>('TestArrayShape', {
             b: valueIsString,
         }),
-    }))([
+    }))
+
+    assert.strictEqual(valueIsTestArrayShape([
+        {
+            a: {
+                b: '',
+            },
+        },
+    ]), true)
+
+    valueIsTestArrayShape([
         {
             a: {},
         },
