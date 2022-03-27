@@ -7,6 +7,7 @@ import valueIsNull from '../valueIsNull'
 import valueIsString from '../valueIsString'
 import valueIsUndefined from '../valueIsUndefined'
 import { Nested } from './testTypes'
+import buildRecursiveValidator from '../buildRecursiveValidator'
 
 const main = () => {
     const valueIsArrayOfNulls = buildValueIsArrayOf(valueIsNull)
@@ -41,7 +42,7 @@ const main = () => {
     const valueIsNested: Validator<Nested> = buildValueIsShape<Nested>({
         a: buildValueIsOneOf(
             valueIsUndefined,
-            ((...params) => valueIsNested(...params)) as Validator<Nested>,
+            buildRecursiveValidator(() => valueIsNested),
         ),
     })
 
