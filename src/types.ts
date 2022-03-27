@@ -1,5 +1,8 @@
+export type ValidationPath = (string | number)[]
+
 export type ValidatorOptions = {
-    debugLogIsEnabled: true;
+    shouldThrowErrorOnFail: true;
+    path: ValidationPath;
 }
 
 export interface Validator<T> {
@@ -9,4 +12,8 @@ export interface Validator<T> {
 
 export type ShapeValidator<T extends Record<string | number, unknown>> = {
     [K in keyof T]-?: Validator<T[K]>;
+}
+
+export type TypeValidationError = Error & {
+    path?: ValidationPath;
 }

@@ -1,25 +1,34 @@
-import type { ShapeValidator, Validator } from './types'
+import throwValidationError from './throwValidationError'
+import type { ShapeValidator, Validator, ValidatorOptions } from './types'
 import valueIsRecord from './valueIsRecord'
-
-type A = { a?: string }
-
-type B = ShapeValidator<A>
 
 const buildValueIsShape = <T extends Record<string | number, unknown>>(
     shape: ShapeValidator<T>
 ) => {
     const validators = Object.entries(shape)
 
-    return ((value: unknown): value is T => {
+    return ((value: unknown, options?: ValidatorOptions): value is T => {
+        const shouldThrowErrorOnFail = options?.shouldThrowErrorOnFail
+    
         if (!valueIsRecord(value)) {
+            if (shouldThrowErrorOnFail) {
+                throwValidationError(options.path)
+            }
             return false
         }
+
         return !validators.some(([valuePropName, validator]) => {
             if (!validator) {
                 return true
             }
     
-            return !validator(value[valuePropName])
+            const isNotValid = !validator(value[valuePropName])
+
+            if (isNotValid && shouldThrowErrorOnFail) {
+                throwValidationError([...options.path, valuePropName])
+            }
+
+            return isNotValid
         })
     }) as Validator<T>
 }

@@ -1,24 +1,28 @@
+import throwValidationError from './throwValidationError'
 import type { Validator, ValidatorOptions } from './types'
 import valueIsArray from './valueIsArray'
 
 const buildValueIsArrayOf = <T>(
     itemValidator: Validator<T>,
-    defaultOptions?: ValidatorOptions,
 ) => ((value: unknown, options?: ValidatorOptions): value is T[] => {
-    const debugLogIsEnabled = defaultOptions?.debugLogIsEnabled || options?.debugLogIsEnabled
+    const shouldThrowErrorOnFail = options?.shouldThrowErrorOnFail
 
     if (!valueIsArray(value)) {
-        if (debugLogIsEnabled) {
-            console.log('Validating arrayOf, value should be an array')
+        if (shouldThrowErrorOnFail) {
+            throwValidationError(options.path)
         }
         return false
     }
 
-    const itemNotOfTypeIndex = value.findIndex((item) => !itemValidator(item, defaultOptions))
+    const itemNotOfTypeIndex = value
+        .findIndex((item, itemIndex) => !itemValidator(item, options ? {
+            ...options,
+            path: [...options.path, itemIndex],
+        } : undefined))
 
     if (itemNotOfTypeIndex !== -1) {
-        if (debugLogIsEnabled) {
-            console.log(`Validating arrayOf, item should be of type T at index ${itemNotOfTypeIndex}`)
+        if (shouldThrowErrorOnFail) {
+            throwValidationError([...options.path, itemNotOfTypeIndex])
         }
         return false
     }

@@ -63,6 +63,19 @@ const main = () => {
             a: 1,
         },
     }), false)
+
+    type TestArrayShape = {
+        a: string;
+    }
+
+    buildValueIsArrayOf(buildValueIsShape<TestArrayShape>({
+        a: valueIsString,
+    }))([
+        {},
+    ], {
+        path: [],
+        shouldThrowErrorOnFail: true,
+    })
 }
 
 main()
