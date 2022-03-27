@@ -1,5 +1,11 @@
+import buildValidator from './buildValidator'
 import { Validator } from './types'
 
-const valueIsUndefined = (value: unknown): value is undefined => value === undefined
+const validationFunction = (value: unknown): value is undefined => value === undefined
 
-export default valueIsUndefined as Validator<undefined>
+const valueIsUndefined = buildValidator(
+    'undefined',
+    validationFunction,
+)
+
+export default valueIsUndefined

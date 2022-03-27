@@ -1,5 +1,10 @@
-import { Validator } from './types'
+import buildValidator from './buildValidator'
 
-const valueIsString = (value: unknown): value is string => typeof value === 'string'
+const validationFunction = (value: unknown): value is string => typeof value === 'string'
 
-export default valueIsString as Validator<string>
+const valueIsString = buildValidator(
+    'string',
+    validationFunction,
+)
+
+export default valueIsString

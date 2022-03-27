@@ -1,33 +1,42 @@
+import buildValidator from './buildValidator'
 import throwValidationError from './throwValidationError'
 import type { Validator, ValidatorOptions } from './types'
 import valueIsArray from './valueIsArray'
 
 const buildValueIsArrayOf = <T>(
     itemValidator: Validator<T>,
-) => ((value: unknown, options?: ValidatorOptions): value is T[] => {
-    const shouldThrowErrorOnFail = options?.shouldThrowErrorOnFail
+) => {
+    const typeName = `Array<${itemValidator.typeName}>`
 
-    if (!valueIsArray(value)) {
-        if (shouldThrowErrorOnFail) {
-            throwValidationError(options.path)
+    const validationFunction = (value: unknown, options?: ValidatorOptions): value is T[] => {
+        if (!valueIsArray(value)) {
+            if (options) {
+                throwValidationError(
+                    options.path,
+                    typeName,
+                    value,
+                )
+            }
+            return false
         }
-        return false
+    
+        const itemNotOfTypeIndex = value
+            .findIndex((item, itemIndex) => !itemValidator(item, options ? {
+                ...options,
+                path: [...options.path, itemIndex],
+            } : undefined))
+    
+        if (itemNotOfTypeIndex !== -1) {
+            return false
+        }
+    
+        return true
     }
 
-    const itemNotOfTypeIndex = value
-        .findIndex((item, itemIndex) => !itemValidator(item, options ? {
-            ...options,
-            path: [...options.path, itemIndex],
-        } : undefined))
-
-    if (itemNotOfTypeIndex !== -1) {
-        if (shouldThrowErrorOnFail) {
-            throwValidationError([...options.path, itemNotOfTypeIndex])
-        }
-        return false
-    }
-
-    return true
-}) as Validator<T[]>
+    return buildValidator(
+        typeName,
+        validationFunction,
+    )
+}
 
 export default buildValueIsArrayOf

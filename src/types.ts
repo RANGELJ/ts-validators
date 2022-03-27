@@ -8,6 +8,7 @@ export type ValidatorOptions = {
 export interface Validator<T> {
     (item: unknown, options?: ValidatorOptions): item is T;
     v: (args: T) => T;
+    typeName: string;
 }
 
 export type ShapeValidator<T extends Record<string | number, unknown>> = {

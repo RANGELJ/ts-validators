@@ -25,7 +25,7 @@ const main = () => {
         array1: string[];
     }
 
-    const valueIsBaseShape = buildValueIsShape<TestType>({
+    const valueIsBaseShape = buildValueIsShape<TestType>('TestType', {
         id: valueIsString,
         array1: valueIsArrayOfString,
     })
@@ -39,7 +39,7 @@ const main = () => {
         id: 'hello',
     }), false)
 
-    const valueIsNested: Validator<Nested> = buildValueIsShape<Nested>({
+    const valueIsNested: Validator<Nested> = buildValueIsShape<Nested>('Nested', {
         a: buildValueIsOneOf(
             valueIsUndefined,
             buildRecursiveValidator(() => valueIsNested),
@@ -70,8 +70,8 @@ const main = () => {
         };
     }
 
-    buildValueIsArrayOf(buildValueIsShape<TestArrayShape>({
-        a: buildValueIsShape<TestArrayShape['a']>({
+    buildValueIsArrayOf(buildValueIsShape<TestArrayShape>('TestArrayShape', {
+        a: buildValueIsShape<TestArrayShape['a']>('TestArrayShape', {
             b: valueIsString,
         }),
     }))([

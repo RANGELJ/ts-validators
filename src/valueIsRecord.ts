@@ -1,7 +1,8 @@
+import buildValidator from './buildValidator'
 import { Validator } from './types'
 import valueIsArray from './valueIsArray'
 
-const valueIsRecord = (value: unknown): value is Record<string | number, unknown> => {
+const validationFunction = (value: unknown): value is Record<string | number, unknown> => {
     if (typeof value !== 'object') {
         return false
     }
@@ -17,4 +18,9 @@ const valueIsRecord = (value: unknown): value is Record<string | number, unknown
     return true
 }
 
-export default valueIsRecord as Validator<Record<string | number, unknown>>
+const valueIsRecord = buildValidator(
+    'Record',
+    validationFunction,
+)
+
+export default valueIsRecord

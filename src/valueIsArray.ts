@@ -1,5 +1,10 @@
-import { Validator } from './types'
+import buildValidator from './buildValidator'
 
-const valueIsArray = (value: unknown): value is unknown[] => Array.isArray(value)
+const rawValidator = (value: unknown): value is unknown[] => Array.isArray(value)
 
-export default valueIsArray as Validator<unknown[]>
+const valueIsArray = buildValidator(
+    `Array`,
+    rawValidator,
+)
+
+export default valueIsArray
