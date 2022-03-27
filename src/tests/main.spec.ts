@@ -8,6 +8,7 @@ import valueIsString from '../valueIsString'
 import valueIsUndefined from '../valueIsUndefined'
 import { Nested } from './testTypes'
 import buildRecursiveValidator from '../buildRecursiveValidator'
+import buildValueIsConstant from '../buildValueIsConstant'
 
 const main = () => {
     const valueIsArrayOfNulls = buildValueIsArrayOf(valueIsNull)
@@ -63,6 +64,11 @@ const main = () => {
             a: 1,
         },
     }), false)
+
+    const valueIsCString = buildValueIsConstant('CString')
+
+    assert.strictEqual(valueIsCString(undefined), false)
+    assert.strictEqual(valueIsCString('CString'), true)
 
     type TestArrayShape = {
         a: {

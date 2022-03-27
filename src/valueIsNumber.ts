@@ -1,5 +1,4 @@
 import buildValidator from './buildValidator'
-import { Validator } from './types'
 
 const validationFunction = (value: unknown): value is number => {
     if (typeof value !== 'number'){

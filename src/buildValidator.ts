@@ -2,7 +2,7 @@ import throwValidationError from './throwValidationError'
 import { Validator, ValidatorOptions } from './types'
 
 const EMPTY_FUNCTION = () => {
-    throw new Error('This function should never be called, is meant only to guide the type system')
+    throw new Error('This function should never be called, it is mean only to guide the type system')
 }
 
 type ValidationFunction<T> = (value: unknown, options?: ValidatorOptions) => value is T
