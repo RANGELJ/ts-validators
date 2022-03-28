@@ -1,22 +1,21 @@
 import buildValidator from './buildValidator'
-import type { Validator } from './types'
+import type { Validator, ValidatorOptions } from './types'
 
-const buildValueIsOneOf = <T, T2>(
-    validator1: Validator<T>,
-    validator2: Validator<T2>,
+type InferType<V> = V extends Validator<infer T> ? T : any;
+
+const buildValueIsOneOf = <T extends Validator<any>>(
+    validators: T[]
 ) => {
-    const validationFunction = (value: unknown): value is T | T2 => {
-        if (validator1(value)) {
-            return true
-        }
-        if (validator2(value)) {
+    const validationFunction = (value: unknown, options?: ValidatorOptions): value is InferType<T> => {
+        const successfulValidator = validators.some((validator) => validator(value, options))
+        if (successfulValidator) {
             return true
         }
         return false
     }
 
     return buildValidator(
-        `${validator1.typeName} | ${validator2.typeName}`,
+        validators.map((validator) => validator.typeName).join(' | '),
         validationFunction,
     )
 }

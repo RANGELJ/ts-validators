@@ -41,10 +41,10 @@ const main = () => {
     }), false)
 
     const valueIsNested: Validator<Nested> = buildValueIsShape<Nested>('Nested', {
-        a: buildValueIsOneOf(
-            valueIsUndefined,
+        a: buildValueIsOneOf([
             buildRecursiveValidator(() => valueIsNested),
-        ),
+            valueIsUndefined,
+        ]),
     })
 
     assert.strictEqual(valueIsNested({
