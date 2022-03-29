@@ -1,6 +1,6 @@
 {
   "name": "ts-validators",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "A way to validate unknown values in typescript",
   "scripts": {
     "build": "tsc"

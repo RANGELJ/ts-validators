@@ -11,8 +11,12 @@ export interface Validator<T> {
     typeName: string;
 }
 
-export type ShapeValidator<T extends Record<string | number, unknown>> = {
-    [K in keyof T]-?: Validator<T[K]>;
+type Writeable<T> = { -readonly [P in keyof T]: T[P] }
+
+type WValidator<T> = Validator<Writeable<T>>
+
+export declare type ShapeValidator<T extends Record<string | number, unknown>> = {
+    [K in keyof T]-?: WValidator<T[K]>;
 }
 
 export type TypeValidationError = Error & {
