@@ -9,6 +9,7 @@ import valueIsUndefined from '../valueIsUndefined'
 import { Nested } from './testTypes'
 import buildRecursiveValidator from '../buildRecursiveValidator'
 import buildValueIsConstant from '../buildValueIsConstant'
+import valueIsTypeValidationError from '../valueIsTypeValidationError'
 
 const main = () => {
     const valueIsArrayOfNulls = buildValueIsArrayOf(valueIsNull)
@@ -90,14 +91,28 @@ const main = () => {
         },
     ]), true)
 
-    valueIsTestArrayShape([
-        {
-            a: {},
-        },
-    ], {
+    const valueIsOneOfConstants = buildValueIsOneOf([
+        buildValueIsConstant('A'),
+        buildValueIsConstant('B'),
+        buildValueIsConstant('C'),
+    ])
+
+    valueIsOneOfConstants('C', {
         path: [],
         shouldThrowErrorOnFail: true,
     })
+
+    try {
+        valueIsOneOfConstants('D', {
+            path: [],
+            shouldThrowErrorOnFail: true,
+        })
+    } catch (error) {
+        if (!valueIsTypeValidationError(error)) {
+            throw error
+        }
+        assert.strictEqual(error.expectedTypeName, 'A')
+    }
 }
 
 main()

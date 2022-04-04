@@ -1,14 +1,16 @@
-import type { TypeValidationError, ValidationPath } from './types'
+import buildBaseValidationError from './buildValidationError'
+import type { ValidationPath } from './types'
 
 const throwValidationError = (
     path: ValidationPath,
     expectedTypeName: string,
     actualValue: unknown
 ) => {
-    const pathString = path.length < 1 ? '' : `:Path: ${path.join('.')}`
-
-    const error: TypeValidationError = new Error(`Expecting: ${expectedTypeName}, recieved: ${actualValue} ${pathString}`)
-    error.path = path
+    const error = buildBaseValidationError({
+        path,
+        expectedTypeName,
+        actualValue,
+    })
     throw error
 }
 

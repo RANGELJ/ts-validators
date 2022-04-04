@@ -19,6 +19,7 @@ export declare type ShapeValidator<T extends Record<string | number, unknown>> =
     [K in keyof T]-?: WValidator<T[K]>;
 }
 
-export type TypeValidationError = Error & {
-    path?: ValidationPath;
+export type TypeValidationError = {
+    expectedTypeName: string;
+    path: ValidationPath;
 }
