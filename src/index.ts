@@ -1,4 +1,5 @@
 export { default as buildRecursiveValidator  } from './buildRecursiveValidator'
+export { default as buildValueIsBothTypes } from './buildValueIsBothTypes'
 export { default as buildValueIsArrayOf  } from './buildValueIsArrayOf'
 export { default as buildValueIsConstant  } from './buildValueIsConstant'
 export { default as buildValueIsOneOf  } from './buildValueIsOneOf'

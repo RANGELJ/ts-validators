@@ -10,6 +10,7 @@ import { Nested } from './testTypes'
 import buildRecursiveValidator from '../buildRecursiveValidator'
 import buildValueIsConstant from '../buildValueIsConstant'
 import valueIsTypeValidationError from '../valueIsTypeValidationError'
+import buildValueIsBothTypes from '../buildValueIsBothTypes'
 
 const main = () => {
     const valueIsArrayOfNulls = buildValueIsArrayOf(valueIsNull)
@@ -113,6 +114,36 @@ const main = () => {
         }
         assert.strictEqual(error.expectedTypeName, 'A')
     }
+
+    type AddA = {
+        a: string;
+    }
+
+    type AddB = {
+        b: string;
+    }
+
+    const valueIsAddA = buildValueIsShape<AddA>('AddA', {
+        a: valueIsString,
+    })
+
+    const valueIsAddB = buildValueIsShape<AddB>('AddB', {
+        b: valueIsString,
+    })
+
+    const valueIsAandB = buildValueIsBothTypes(
+        valueIsAddA,
+        valueIsAddB,
+    )
+
+    assert.strictEqual(valueIsAandB({
+        a: 'hello',
+    }), false)
+
+    assert.strictEqual(valueIsAandB({
+        a: 'hello',
+        b: 'hello',
+    }), true)
 }
 
 main()
