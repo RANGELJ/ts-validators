@@ -11,6 +11,7 @@ import buildRecursiveValidator from '../buildRecursiveValidator'
 import buildValueIsConstant from '../buildValueIsConstant'
 import valueIsTypeValidationError from '../valueIsTypeValidationError'
 import buildValueIsBothTypes from '../buildValueIsBothTypes'
+import valueIsUnknown from '../valueIsUnknown'
 
 const main = () => {
     const valueIsArrayOfNulls = buildValueIsArrayOf(valueIsNull)
@@ -144,6 +145,14 @@ const main = () => {
         a: 'hello',
         b: 'hello',
     }), true)
+
+    type TestWithUnknown = {
+        a: unknown;
+    }
+
+    buildValueIsShape<TestWithUnknown>('TestWithUnknown', {
+        a: valueIsUnknown,
+    })
 }
 
 main()

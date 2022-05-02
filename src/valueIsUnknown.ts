@@ -1,5 +1,4 @@
 import buildValidator from './buildValidator'
-import { ValidatorOptions } from './types'
 
 const validationFunction = (value: unknown): value is unknown => true
 

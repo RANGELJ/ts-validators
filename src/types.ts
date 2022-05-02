@@ -11,7 +11,8 @@ export interface Validator<T> {
     typeName: string;
 }
 
-type Writeable<T> = { -readonly [P in keyof T]: T[P] }
+type Writeable<T> = T extends (Record<string | number, unknown> | unknown[])
+    ? { -readonly [P in keyof T]: T[P] } : T
 
 type WValidator<T> = Validator<Writeable<T>>
 
