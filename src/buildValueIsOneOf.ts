@@ -31,7 +31,12 @@ const buildValueIsOneOf = <T extends Validator<any>>(
         }
 
         if (!hasSuccessfulValidator && optionErrors.length > 0) {
-            throw optionErrors[0]
+            throw optionErrors.reduce((selectedError, optionError) => {
+                if (optionError.path.length > selectedError.path.length) {
+                    return optionError
+                }
+                return selectedError
+            })
         }
 
         return hasSuccessfulValidator
