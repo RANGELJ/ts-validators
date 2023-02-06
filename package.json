@@ -1,6 +1,6 @@
 {
   "name": "ts-validators",
-  "version": "2.4.2",
+  "version": "3.4.2",
   "description": "A way to validate unknown values in typescript",
   "scripts": {
     "build": "node ./scripts/build.js",
@@ -9,6 +9,14 @@
   "type": "module",
   "author": "Rangel Peralta Jorge Luis",
   "license": "MIT",
+  "main": "commonjs/",
+  "module": "esm/",
+  "exports": {
+      ".": {
+          "import": "./commonjs/",
+          "require": "./esm/"
+      }
+  },
   "devDependencies": {
     "@types/fs-extra": "9.0.13",
     "@types/node": "18.7.8",
