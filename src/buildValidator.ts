@@ -5,7 +5,9 @@ const EMPTY_FUNCTION = () => {
     throw new Error('This function should never be called, it is mean only to guide the type system')
 }
 
-type ValidationFunction<T> = (value: unknown, options?: ValidatorOptions) => value is T
+interface ValidationFunction<T> {
+    (value: unknown, options?: ValidatorOptions): value is T
+}
 
 const buildValidator = <T>(
     typeName: string,
