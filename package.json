@@ -1,6 +1,6 @@
 {
   "name": "ts-validators",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "A way to validate unknown values in typescript",
   "scripts": {
     "build": "node ./scripts/build.mjs",
