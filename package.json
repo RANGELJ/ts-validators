@@ -1,6 +1,6 @@
 {
   "name": "ts-validators",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "A way to validate unknown values in typescript",
   "scripts": {
     "build": "node ./scripts/build.mjs",
@@ -8,9 +8,6 @@
   },
   "author": "Rangel Peralta Jorge Luis",
   "license": "MIT",
-  "exports": {
-    "./*": "./commonjs/*.js"
-  },
   "devDependencies": {
     "@types/fs-extra": "9.0.13",
     "@types/node": "18.7.8",
