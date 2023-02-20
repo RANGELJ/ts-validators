@@ -14,16 +14,26 @@ const main = async () => {
     const packageDir = path.resolve(sourceDir, 'package.json')
     await fs.copy(packageDir, path.resolve(targetDir, 'package.json'))
 
+    const declarationDir = path.resolve(targetDir, 'types')
+
     await execa('npx', [
         'tsc',
         '--declaration',
         '--emitDeclarationOnly',
         '--outDir',
-        path.resolve(targetDir, 'types'),
+        declarationDir,
     ], {
         cwd: sourceDir,
         stdio: 'inherit',
     })
+
+    const declarationFiles = await fs.readdir(declarationDir)
+
+    await Promise.all(declarationFiles.map(async (declarationFileName) => {
+        const declarationFilePath = path.resolve(declarationDir, declarationFileName)
+        const declarationFileSource = (await fs.readFile(declarationFilePath)).toString()
+        await fs.writeFile(declarationFilePath, declarationFileSource.replace('export default', 'export ='))
+    }))
 
     await execa('npx', [
         'tsc',
@@ -70,6 +80,7 @@ const main = async () => {
         await fs.rename(filePath, filePath.replace(/\.js$/, '.mjs'))
     }))
 
+    /*
     await execa('npm', [
         'publish',
         '--userconfig',
@@ -78,6 +89,7 @@ const main = async () => {
         cwd: targetDir,
         stdio: 'inherit',
     })
+    */
 }
 
 main()
