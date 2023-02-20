@@ -85,8 +85,8 @@ const main = async () => {
         if (matches) {
             matches?.forEach((match) => {
                 fileContent = fileContent.replace(match, match
-                    .replace(/'$/g, ".mjs'")
-                    .replace(/"$/g, '.mjs"'))
+                    .replace(/'$/, ".mjs'")
+                    .replace(/"$/, '.mjs"'))
             })
         }
 
