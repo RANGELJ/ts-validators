@@ -18,8 +18,8 @@ const main = async () => {
         'tsc',
         '--declaration',
         '--emitDeclarationOnly',
-        '--outFile',
-        path.resolve(targetDir, 'index.d.ts'),
+        '--outDir',
+        path.resolve(targetDir, 'types'),
     ], {
         cwd: sourceDir,
         stdio: 'inherit',
