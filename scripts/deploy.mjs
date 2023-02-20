@@ -45,6 +45,17 @@ const main = async () => {
             return
         }
         const filePath = path.resolve(es6Dir, fileName)
+        let fileContent = (await fs.readFile(filePath)).toString()
+        const matches = fileContent.match(/'\.\/[^]+?'/)
+
+        if (matches) {
+            matches?.forEach((match) => {
+                fileContent = fileContent.replace(match, match.replace(/'$/, ".mjs'"))
+            })
+        }
+
+        await fs.writeFile(filePath, fileContent)
+
         await fs.rename(filePath, filePath.replace(/\.js$/, '.mjs'))
     }))
 
