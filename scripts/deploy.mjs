@@ -35,16 +35,29 @@ const main = async () => {
         await fs.writeFile(declarationFilePath, declarationFileSource.replace('export default', 'export ='))
     }))
 
+    const commonJsDir = path.resolve(targetDir, 'cjs')
+
     await execa('npx', [
         'tsc',
         '--outDir',
-        path.resolve(targetDir, 'cjs'),
+        commonJsDir,
         '--module',
         'commonjs',
     ], {
         cwd: sourceDir,
         stdio: 'inherit',
     })
+
+    const commonJsFiles = await fs.readdir(commonJsDir)
+
+    await Promise.all(commonJsFiles.map(async (fileName) => {
+        const filePath = path.resolve(commonJsDir, fileName)
+        const fileSource = (await fs.readFile(filePath)).toString()
+        const newSource = fileSource
+            .replace('\nObject.defineProperty(exports, "__esModule", { value: true });', '')
+            .replace('exports.default = ', 'module.exports = ')
+        await fs.writeFile(filePath, newSource)
+    }))
 
     const es6Dir = path.resolve(targetDir, 'es6')
 
