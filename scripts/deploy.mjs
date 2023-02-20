@@ -16,6 +16,17 @@ const main = async () => {
 
     await execa('npx', [
         'tsc',
+        '--declaration',
+        '--emitDeclarationOnly',
+        '--outFile',
+        path.resolve(targetDir, 'index.d.ts'),
+    ], {
+        cwd: sourceDir,
+        stdio: 'inherit',
+    })
+
+    await execa('npx', [
+        'tsc',
         '--outDir',
         path.resolve(targetDir, 'cjs'),
         '--module',
