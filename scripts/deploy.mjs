@@ -12,17 +12,12 @@ const main = async () => {
     await fs.remove(targetDir)
 
     const packageDir = path.resolve(sourceDir, 'package.json')
-    const packageData = await fs.readJSON(packageDir)
-
-    packageData.type = 'commonjs'
-    const libPackagePath = path.resolve(targetDir, 'package.json')
-    await fs.ensureFile(libPackagePath)
-    await fs.writeJSON(libPackagePath, packageData, { spaces: 4 })
+    await fs.copy(packageDir, path.resolve(targetDir, 'package.json'))
 
     await execa('npx', [
         'tsc',
         '--outDir',
-        targetDir,
+        path.resolve(targetDir, 'cjs'),
         '--module',
         'commonjs',
     ], {
@@ -30,6 +25,30 @@ const main = async () => {
         stdio: 'inherit',
     })
 
+    const es6Dir = path.resolve(targetDir, 'es6')
+
+    await execa('npx', [
+        'tsc',
+        '--outDir',
+        es6Dir,
+        '--module',
+        'ES6',
+    ], {
+        cwd: sourceDir,
+        stdio: 'inherit',
+    })
+
+    const es6Files = await fs.readdir(es6Dir)
+
+    await Promise.all(es6Files.map(async (fileName) => {
+        if (fileName.endsWith('.d.ts')) {
+            return
+        }
+        const filePath = path.resolve(es6Dir, fileName)
+        await fs.rename(filePath, filePath.replace(/\.js$/, '.mjs'))
+    }))
+
+    /*
     await execa('npm', [
         'publish',
         '--userconfig',
@@ -38,6 +57,7 @@ const main = async () => {
         cwd: targetDir,
         stdio: 'inherit',
     })
+    */
 }
 
 main()
