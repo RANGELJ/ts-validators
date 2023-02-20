@@ -80,7 +80,6 @@ const main = async () => {
         await fs.rename(filePath, filePath.replace(/\.js$/, '.mjs'))
     }))
 
-    /*
     await execa('npm', [
         'publish',
         '--userconfig',
@@ -89,7 +88,6 @@ const main = async () => {
         cwd: targetDir,
         stdio: 'inherit',
     })
-    */
 }
 
 main()
